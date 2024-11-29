@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from numpy.polynomial.polynomial import Polynomial
 from scipy.interpolate import interp1d
 # 读取图像
-bf_img = cv2.imread('TB-bead-1.png')  # Bright-field image
-fl_img = cv2.imread('FL-bead-1.png')  # Fluorescence image
+bf_img = cv2.imread('./20241128TB model 采集/微珠-8000/TB-微珠-1.bmp')  # Bright-field image
+fl_img = cv2.imread('./20241128TB model 采集/微珠-8000/FL-微珠-1.bmp')  # Fluorescence image
 
 if bf_img is None or fl_img is None:
     print("无法加载图像，请检查文件路径！")
@@ -26,14 +26,17 @@ def histogram_matching(source, template):
         # 获取源图像和模板图像的第 i 个通道
         src_channel = source[:, :, i]
         tmpl_channel = template[:, :, i]
+
         # 计算直方图和累积分布函数（CDF）
         src_hist, _ = np.histogram(src_channel, bins=256, range=(0, 256))
         tmpl_hist, _ = np.histogram(tmpl_channel, bins=256, range=(0, 256))
+
         src_cdf = np.cumsum(src_hist).astype(float) / src_hist.sum()
         tmpl_cdf = np.cumsum(tmpl_hist).astype(float) / tmpl_hist.sum()
+
         # 计算像素值的映射表
-        interp_func = interp1d(src_cdf, np.arange(256), kind='linear', bounds_error=False, fill_value=(0, 255))
-        mapping = interp_func(tmpl_cdf).astype(np.uint8)
+        mapping = np.interp(src_cdf, tmpl_cdf, np.arange(256))
+
         # 使用查找表映射像素值
         matched[:, :, i] = cv2.LUT(src_channel, mapping.astype(np.uint8))
 
@@ -54,7 +57,7 @@ mean_residual = np.mean(residual_gray)
 print(f"最大灰度差值: {max_residual}")
 print(f"灰度差均值: {mean_residual}")
 # 绘制图像和直方图
-plt.figure(figsize=(15, 10), dpi=420)
+plt.figure(figsize=(15, 10), dpi=150)
 plt.suptitle("Images and Histograms", fontsize=16)
 
 # 子图1：原始 BF 图像

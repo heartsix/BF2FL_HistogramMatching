@@ -2,23 +2,22 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from color_matcher import ColorMatcher
-from color_matcher.normalizer import Normalizer
 
 # 读取图像
-bf_img = cv2.imread('TB-bead-1.png')  # Bright-field image
-fl_img = cv2.imread('FL-bead-1.png')  # Fluorescence image
+bf_img = cv2.imread('./20241128TB model 采集/微珠-8000/TB-微珠-1.bmp')  # Bright-field image
+fl_img = cv2.imread('./20241128TB model 采集/微珠-8000/FL-微珠-1.bmp')  # Fluorescence image
 
 if bf_img is None or fl_img is None:
     print("无法加载图像，请检查文件路径！")
     exit()
 
-# 将图像从BGR转换为RGB
+# 将图像从BGR转换为RGB 
 bf_img_rgb = cv2.cvtColor(bf_img, cv2.COLOR_BGR2RGB)
 fl_img_rgb = cv2.cvtColor(fl_img, cv2.COLOR_BGR2RGB)
 
 # 使用 ColorMatcher 进行颜色匹配
 cm = ColorMatcher()
-matched_img = cm.transfer(src=bf_img_rgb, ref=fl_img_rgb, method='mkl')
+matched_img = cm.transfer(src=bf_img_rgb, ref=fl_img_rgb, method='default')
 matched_img = matched_img.astype(np.uint8)
 
 # 计算灰度残差
