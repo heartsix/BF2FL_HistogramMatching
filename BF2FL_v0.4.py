@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from color_matcher import ColorMatcher
 
 # 读取图像
-bf_img = cv2.imread('./20241128TB model 采集/微珠-8000/TB-微珠-1.bmp')  # Bright-field image
-fl_img = cv2.imread('./20241128TB model 采集/微珠-8000/FL-微珠-1.bmp')  # Fluorescence image
+bf_img = cv2.imread('20241128TB model/cell-14000/TB-cell-3.bmp')  # Bright-field image
+fl_img = cv2.imread('20241128TB model/cell-14000/FL-cell-3.bmp')  # Fluorescence image
 
 if bf_img is None or fl_img is None:
     print("无法加载图像，请检查文件路径！")
